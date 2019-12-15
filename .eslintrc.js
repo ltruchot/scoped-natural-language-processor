@@ -20,5 +20,6 @@ module.exports = {
     '@typescript-eslint',
   ],
   rules: {
+    "import/prefer-default-export": 0
   },
 };

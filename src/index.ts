@@ -1,2 +1,3 @@
-console.log('test');
-const toto = 3;
+import { parse } from './processor/parser';
+
+parse('');

@@ -1,0 +1,1 @@
+{"version":3,"file":"sanitizer.js","sourceRoot":"","sources":["../../src/processor/sanitizer.ts"],"names":[],"mappings":";;;;;AAAA,wDAAwC;AACxC,+BAA8B;AAE9B,IAAM,GAAG,GAAG,OAAO,MAAM,KAAK,WAAW,CAAC,CAAC,CAAC,CAAC,IAAI,aAAK,CAAC,EAAE,CAAC,CAAC,CAAC,MAAM,CAAC,CAAC,CAAC,MAAM,CAAC;AAC5E,IAAM,EAAE,GAAG,mBAAe,CAAC,GAAG,CAAC,CAAC;AAEjB,QAAA,QAAQ,GAAK,EAAE,UAAC"}
