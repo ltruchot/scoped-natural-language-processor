@@ -1,8 +1,6 @@
-import { right } from 'fp-ts/lib/Either';
+import { right, Either, chain } from 'fp-ts/lib/Either';
+import { ProcessError } from './models';
 
-export type Inferred = {
-  original: string;
-};
 
-type FnInfer = (str: string) => void;
-export const infer: FnInfer = (str) => right(str);
+type FnInfer = (e: Either<ProcessError, Inferred>) => Either<ProcessError, Inferred>;
+export const infer: FnInfer = (e) => chain((i) => right(i) as Either<ProcessError, Inferred>);

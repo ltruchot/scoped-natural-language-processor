@@ -7,6 +7,8 @@ export declare type ProcessError = {
     errors: Array<CustomError>;
 };
 export declare type Inferred = {
-    original: string;
+    input: any;
+    sanitized: string;
+    words: string[];
 };
 //# sourceMappingURL=models.d.ts.map

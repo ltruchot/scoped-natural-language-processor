@@ -6,20 +6,8 @@ import { Option, getOrElse } from 'fp-ts/lib/Option';
 import { flow } from 'fp-ts/lib/function';
 
 // custom
-import { prop } from '../helpers/objects';
-
-// ---- MODELS
-// CustomError: contains failing reason of the process
-export type CustomError = {
-  code: number;
-  msg: string;
-};
-
-// ProcessError: contains original input, and all the CustomError encountered
-export type ProcessError = {
-  input: unknown;
-  errors: Array<CustomError>
-};
+import { prop } from '../helpers/object';
+import { CustomError } from './models';
 
 // ---- DATA
 // errors: static list of possible errors
@@ -30,6 +18,9 @@ const errors: Array<CustomError> = [
   }, {
     code: 1,
     msg: 'input is empty',
+  }, {
+    code: 2,
+    msg: "input can't be correctly splitted in words",
   },
 ];
 

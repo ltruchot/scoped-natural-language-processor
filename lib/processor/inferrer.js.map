@@ -1,1 +1,1 @@
-{"version":3,"file":"inferrer.js","sourceRoot":"","sources":["../../src/processor/inferrer.ts"],"names":[],"mappings":";;AAAA,2CAAyC;AAO5B,QAAA,KAAK,GAAY,UAAC,GAAG,IAAK,OAAA,cAAK,CAAC,GAAG,CAAC,EAAV,CAAU,CAAC"}
+{"version":3,"file":"inferrer.js","sourceRoot":"","sources":["../../src/processor/inferrer.ts"],"names":[],"mappings":";;AAAA,2CAAwD;AAK3C,QAAA,KAAK,GAAY,UAAC,CAAC,IAAK,OAAA,cAAK,CAAC,UAAC,CAAC,IAAK,OAAA,cAAK,CAAC,CAAC,CAAmC,EAA1C,CAA0C,CAAC,EAAxD,CAAwD,CAAC"}
