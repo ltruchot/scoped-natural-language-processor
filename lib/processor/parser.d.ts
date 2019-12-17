@@ -1,6 +1,5 @@
 import { Either } from 'fp-ts/lib/Either';
-import { ProcessError } from './errors';
-import { Inferred } from './inferrer';
+import { Inferred, ProcessError } from './models';
 declare type FnParse = (input: unknown) => Either<ProcessError, Inferred>;
 export declare const parse: FnParse;
 declare type FnSplitWords = (s: string) => string[];

@@ -5,9 +5,9 @@ import {
 import { flow } from 'fp-ts/lib/function';
 
 // domain
-import { ProcessError, getError } from './errors';
+import { getError } from './errors';
 import { sanitize } from './sanitizer';
-import { Inferred } from './inferrer';
+import { Inferred, ProcessError } from './models';
 
 // helpers
 import { trim, replace, split } from '../helpers/string';

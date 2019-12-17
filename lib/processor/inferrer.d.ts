@@ -1,10 +1,5 @@
 import { Either } from 'fp-ts/lib/Either';
-import { ProcessError } from './errors';
-export declare type Inferred = {
-    input: any;
-    sanitized: string;
-    words: string[];
-};
+import { ProcessError, Inferred } from './models';
 declare type FnInfer = (e: Either<ProcessError, Inferred>) => Either<ProcessError, Inferred>;
 export declare const infer: FnInfer;
 export {};

@@ -1,2 +1,2 @@
-export declare const process: (input: unknown) => import("fp-ts/lib/Either").Either<import("./processor/models").ProcessError, any>;
+export declare const process: (input: unknown) => import("fp-ts/lib/Either").Either<import("./processor/models").ProcessError, import("./processor/models").Inferred>;
 //# sourceMappingURL=index.d.ts.map
