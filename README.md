@@ -10,11 +10,31 @@ Basic use example:
 import{ process } from "scoped-natural-language-processor";
 const config = [
   {
-    key: "sentence",
-    is: ["*suject", "*verb", "*ajective"]
-  }
-]
-const process = 
+    key: 'sentence',
+    is: [
+      ['*subject', '*linkingVerb', '*adjective'],
+      ['*subject', '*intransitiveVerb'],
+    ],
+  },
+  {
+    key: 'subject',
+    is: ['this cat', 'the sky', 'grandma'],
+  },
+  {
+    key: 'linkingVerb',
+    is: ['is', 'seems', 'becomes'],
+  },
+  {
+    key: 'intransitiveVerb',
+    is: ['sings', 'calms down'],
+  },
+  {
+    key: 'adjective',
+    is: ['gray', 'threatening'],
+  },
+];
+const [error, result] = process(config, 'this cat is gray');
+console.log(result || error);
 ```
 
 ## Licences
