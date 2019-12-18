@@ -15,11 +15,16 @@ const errors: Array<CustomError> = [
   {
     code: 0,
     msg: 'input is not a string',
-  }, {
+  },
+  {
     code: 1,
+    msg: 'config is not a valid array of concept',
+  },
+  {
+    code: 2,
     msg: 'input is empty',
   }, {
-    code: 2,
+    code: 3,
     msg: "input can't be correctly splitted in words",
   },
 ];

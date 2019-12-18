@@ -1,9 +1,9 @@
-import { right } from 'fp-ts/lib/Either';
+import { parse } from './parser';
 import { infer } from './inferrer';
 
 describe('Inferer::infer', () => {
   test('Test 1', () => {
-    const str = 'draw me a sheep';
-    expect(infer(str)).toEqual(right(str));
+    const parsed = parse([], 'Draw me a sheep');
+    expect(infer(parsed)).toEqual(parsed);
   });
 });

@@ -1,1 +1,1 @@
-{"version":3,"file":"inferrer.d.ts","sourceRoot":"","sources":["../../src/processor/inferrer.ts"],"names":[],"mappings":"AAAA,OAAO,EAAS,MAAM,EAAS,MAAM,kBAAkB,CAAC;AACxD,OAAO,EAAE,YAAY,EAAE,QAAQ,EAAE,MAAM,UAAU,CAAC;AAGlD,aAAK,OAAO,GAAG,CAAC,CAAC,EAAE,MAAM,CAAC,YAAY,EAAE,QAAQ,CAAC,KAAK,MAAM,CAAC,YAAY,EAAE,QAAQ,CAAC,CAAC;AACrF,eAAO,MAAM,KAAK,EAAE,OAA4E,CAAC"}
+{"version":3,"file":"inferrer.d.ts","sourceRoot":"","sources":["../../src/processor/inferrer.ts"],"names":[],"mappings":"AACA,OAAO,EAA0B,WAAW,EAAE,MAAM,UAAU,CAAC;AAE/D,eAAO,MAAM,KAAK,EAAE,WAAgF,CAAC"}

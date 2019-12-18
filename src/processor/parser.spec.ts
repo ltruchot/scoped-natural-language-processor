@@ -4,20 +4,25 @@ import { getError } from './errors';
 import { parse } from './parser';
 
 describe('Parser: Parse method', () => {
-  test('Non-string param should return a code 0 error', () => {
+  test('Non-string param should return a code 1 error', () => {
+    // null input
+    const config = [];
     let input = null;
-    expect(parse(input))
-      .toEqual(left({ input, errors: [getError(0)] }));
+    expect(parse(config, input))
+      .toEqual(left({ input, config, errors: [getError(1)] }));
 
+    // wrong type input
     input = ['test'];
-    expect(parse(input))
-      .toEqual(left({ input, errors: [getError(0)] }));
+    expect(parse(config, input))
+      .toEqual(left({ input, config, errors: [getError(1)] }));
   });
 
 
   test('Empty string param should return a code 1 error', () => {
+    // empty input
     const input = '';
-    expect(parse(input))
-      .toEqual(left({ input, errors: [getError(1)] }));
+    const config = [];
+    expect(parse(config, input))
+      .toEqual(left({ input, errors: [getError(2)] }));
   });
 });
