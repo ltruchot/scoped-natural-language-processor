@@ -7,7 +7,14 @@ An input/output natural language interpreter written in TypeScript. It takes a c
 ## Use
 Basic use example:
 ```typescript
-const TODO = {};
+import{ process } from "scoped-natural-language-processor";
+const config = [
+  {
+    key: "sentence",
+    is: ["*suject", "*verb", "*ajective"]
+  }
+]
+const process = 
 ```
 
 ## Licences

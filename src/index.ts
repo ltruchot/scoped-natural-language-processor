@@ -13,3 +13,31 @@ type FnProcess = (config: unknown, input: unknown) => Output;
 export const process: FnProcess = flow(parse, infer, foldProcess);
 console.log(process([], 'Draw    me a sheep  '));
 console.log(process([], ''));
+
+const config = [
+  {
+    key: 'sentence',
+    is: [
+      ['*subject', '*linkingVerb', '*adjective'],
+      ['*subject', '*intransitiveVerb'],
+    ],
+  },
+  {
+    key: 'subject',
+    is: ['this cat', 'the sky', 'grandma'],
+  },
+  {
+    key: 'linkingVerb',
+    is: ['is', 'seems', 'becomes'],
+  },
+  {
+    key: 'intransitiveVerb',
+    is: ['sings', 'calms down'],
+  },
+  {
+    key: 'adjective',
+    is: ['gray', 'threatening'],
+  },
+];
+const [error, result] = process(config, 'this cat is gray');
+console.log(result || error);
