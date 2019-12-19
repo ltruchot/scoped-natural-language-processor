@@ -38,6 +38,9 @@ const errors: Array<CustomError> = [
   }, {
     code: 6,
     msg: "input can't be correctly splitted in words",
+  }, {
+    code: 7,
+    msg: 'No matching concept',
   },
 ];
 

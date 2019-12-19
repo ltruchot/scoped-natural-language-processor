@@ -1,4 +1,5 @@
 import { Either } from 'fp-ts/lib/Either';
+import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
 
 // Concept: a record containing a key and a list of nouns
 // ex: { key: "color", is: ["red", "green", "blue"] }
@@ -31,15 +32,17 @@ export type CustomError = {
 export type ProcessError = {
   input: unknown;
   config: unknown;
-  errors: Array<CustomError>;
+  errors: NonEmptyArray<CustomError>;
 };
 
 // Inferred: the result
 export type Inferred = {
   input: string;
-  config: Concept[],
+  config: NonEmptyArray<Concept>,
   sanitized: string;
   words: string[];
+  solution: string[];
+  understood: any;
 };
 
 export type ProcessStep = (e: Either<ProcessError, Inferred>) => Either<ProcessError, Inferred>;

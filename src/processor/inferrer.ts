@@ -1,20 +1,29 @@
-import { right, Either, chain } from 'fp-ts/lib/Either';
-import { ProcessError, Inferred, ProcessStep } from './models';
+import {
+  right, chain, left,
+} from 'fp-ts/lib/Either';
+import {
+  pipe, take, drop, map, prop, reduce, find, head, equals, includes, any,
+} from 'ramda';
+import {
+  Inferred, ProcessStep, ProcessError,
+} from './models';
+import { isFlat, firstReal } from '../helpers/array';
+import { getError } from './errors';
+import { log } from '../helpers/debug';
 
-export const infer: ProcessStep = (e) => chain((i) => right(i) as Either<ProcessError, Inferred>)(e);
 
-/*
-// understandConcepts:: string -> {[keyOf simple]: string}
-export const understandConcepts = (key, words) => {
+export const infer: ProcessStep = chain(({
+  config, words, ...inferred
+}) => {
+  const findConcept = (val: string) => find(pipe(prop<string, string>('key'), equals(val)), config as any);
   const understood = {};
-
-  // computer concept
-  const concept = findByKey(key)(concepts);
+  let solution: string[] = [];
 
 
   // match the first phrase that contains each concept well placed
-  const findPath = (parts, understanding) => find((attempt) => pipe(reduce((acc, part) => {
+  const findPath: any = (parts: any, understanding: any) => find((attempt: any) => pipe(reduce((acc, part) => {
     // this "find" is an "all" process. Stop it on first mismatch.
+    solution = attempt;
     if (!acc.continue) {
       return acc;
     }
@@ -50,8 +59,8 @@ export const understandConcepts = (key, words) => {
     }
 
     // new key begin with star: check if this new concept exists
-    const val = drop(1, newKey);
-    const newConcept = findByKey(val)(concepts);
+    const val: any = drop(1, newKey);
+    const newConcept = findConcept(val);
     if (!newConcept) {
       return {
         ...acc,
@@ -61,24 +70,26 @@ export const understandConcepts = (key, words) => {
     }
 
     // if new concept is an simple array of choice, check if part is in here
-    if (isFlat(newConcept.is)) {
-      if (includes(part, newConcept.is)) {
+    if (isFlat((newConcept as any).is)) {
+      if (includes(part, (newConcept as any).is)) {
+        // eslint-disable-next-line no-param-reassign
         understanding[newConcept.key] = part;
       }
       return {
         ...acc,
         idx: acc.idx + 1,
-        continue: includes(part, newConcept.is),
+        continue: includes(part, (newConcept as any).is),
       };
     }
 
     // recursion on nested concept
+    // eslint-disable-next-line no-param-reassign
     understanding[newConcept.key] = {};
 
-    const sub = pipe(map((nc) => {
+    const sub: any = pipe(map((nc: any) => {
       const newParts = take(nc.length, drop(acc.idx, parts));
       return findPath(newParts, understanding[newConcept.key])([nc]);
-    }), firstReal)(newConcept.is);
+    }), firstReal)((newConcept as any).is);
 
     return {
       ...acc,
@@ -93,9 +104,11 @@ export const understandConcepts = (key, words) => {
     ignore: 0,
   }), prop('continue'))(parts));
 
-  const solution = findPath(words, understood)(concept.is);
-
-
-  return { solution, understood };
-};
-*/
+  const isFound: any = pipe(map<any, any>(prop('key')), log, map(findConcept), map<any, any>(prop('is')), log, any(findPath(words, understood)))(config);
+  console.log(isFound, solution, understood);
+  return isFound
+    ? right({
+      ...inferred, words, config, solution, understood,
+    } as Inferred)
+    : left({ ...inferred, config, errors: [getError(7)] } as ProcessError);
+});

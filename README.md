@@ -34,7 +34,6 @@ const config = [
   },
 ];
 const [error, result] = process(config, 'this cat is gray');
-console.log(result || error);
 ```
 
 ## Licences

@@ -1,4 +1,5 @@
 import { Either } from 'fp-ts/lib/Either';
+import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
 export declare type Concept = {
     key: string;
     is: string[] | Array<string[]>;
@@ -10,13 +11,15 @@ export declare type CustomError = {
 export declare type ProcessError = {
     input: unknown;
     config: unknown;
-    errors: Array<CustomError>;
+    errors: NonEmptyArray<CustomError>;
 };
 export declare type Inferred = {
     input: string;
-    config: Concept[];
+    config: NonEmptyArray<Concept>;
     sanitized: string;
     words: string[];
+    solution: string[];
+    understood: any;
 };
 export declare type ProcessStep = (e: Either<ProcessError, Inferred>) => Either<ProcessError, Inferred>;
 export declare type Output = [ProcessError, null] | [null, Inferred];
