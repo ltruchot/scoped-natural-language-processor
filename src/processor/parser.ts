@@ -14,30 +14,46 @@ import {
 
 // helpers
 import { trim, replace, split } from '../helpers/string';
-import { compact } from '../helpers/array';
+import { compact, all, isStringArray } from '../helpers/array';
 
 // ---- METHODS
 type FnCheckArgs = (config: unknown, input: unknown) => Either<ProcessError, Inferred>;
 const checkArgs: FnCheckArgs = (config, input) => {
-  const errors = [];
-
+  // input should be a string
   if (typeof input !== 'string') {
-    errors.push(getError(0));
+    return left({ input, config, errors: [getError(0)] });
   }
 
-  // TODO: deep check of config
+  // input should not be empty
+  if (input === '') {
+    return left({ input, config, errors: [getError(1)] });
+  }
+
+  // config should be an Array
   if (!Array.isArray(config)) {
-    errors.push(getError(1));
+    return left({ input, config, errors: [getError(2)] });
   }
 
-  return errors.length
-    ? left({ input, config, errors })
-    : right({
-      input: input as string,
-      config: config as Concept[],
-      sanitized: '',
-      words: [],
-    });
+  // config shouldn't be empty
+  if (config.length === 0) {
+    return left({ input, config, errors: [getError(3)] });
+  }
+
+  // config should be well formatted
+  const isValidConfig = all((item) => item.key
+    && Array.isArray(item.is)
+    && (isStringArray(item.is) || all(isStringArray, item.is)));
+  if (!isValidConfig(config)) {
+    return left({ input, config, errors: [getError(4)] });
+  }
+
+
+  return right({
+    input: input as string,
+    config: config as Concept[],
+    sanitized: '',
+    words: [],
+  });
 };
 
 
@@ -47,7 +63,7 @@ const clean: ProcessStep = chain(({ input, config, ...rest }: Inferred) => {
     ? right({
       input, config, ...rest, sanitized,
     })
-    : left({ input, config, errors: [getError(3)] });
+    : left({ input, config, errors: [getError(5)] });
 });
 
 type FnSplitWords = (s: string) => string[];
@@ -59,7 +75,7 @@ const getWords: ProcessStep = chain(({ input, config, sanitized }: Inferred) => 
     ? right({
       input, config, sanitized, words,
     })
-    : left({ input, config, errors: [getError(3)] });
+    : left({ input, config, errors: [getError(6)] });
 });
 
 export const parse = flow(checkArgs, clean, getWords);

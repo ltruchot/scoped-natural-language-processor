@@ -11,8 +11,8 @@ const foldProcess: FnFoldProcess = (e) => fold(l, r)(e);
 
 type FnProcess = (config: unknown, input: unknown) => Output;
 export const process: FnProcess = flow(parse, infer, foldProcess);
-console.log(process([], 'Draw    me a sheep  '));
-console.log(process([], ''));
+/* console.log(process([], 'Draw    me a sheep  '));
+console.log(process([], '')); */
 
 const config = [
   {
