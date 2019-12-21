@@ -8,32 +8,41 @@ An input/output natural language interpreter written in TypeScript. It takes a c
 Basic use example:
 ```typescript
 import{ process } from "scoped-natural-language-processor";
-const config = [
+export const sentences: NonEmptyArray<Concept> = [
   {
     key: 'sentence',
     is: [
       ['*subject', '*linkingVerb', '*adjective'],
-      ['*subject', '*intransitiveVerb'],
+      ['*article', '*subject', '*linkingVerb', '*adjective'],
     ],
   },
   {
+    key: 'article',
+    is: ['this', 'the', 'a'],
+  },
+  {
     key: 'subject',
-    is: ['this cat', 'the sky', 'grandma'],
+    is: ['cat', 'sky', 'grandma'],
   },
   {
     key: 'linkingVerb',
     is: ['is', 'seems', 'becomes'],
   },
   {
-    key: 'intransitiveVerb',
-    is: ['sings', 'calms down'],
-  },
-  {
     key: 'adjective',
     is: ['gray', 'threatening'],
   },
 ];
-const [error, result] = process(config, 'this cat is gray');
+const [error, result] = process(config, 'this cat seems threatening');
+console.log(result); 
+/*
+{
+  article: 'the',
+  subject: 'cat',
+  linkingVerb: 'is',
+  adjective: 'threatening',
+}
+*/
 ```
 
 ## Licences
