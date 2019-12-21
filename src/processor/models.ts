@@ -26,6 +26,7 @@ export type Concept = {
 export type CustomError = {
   code: number;
   msg: string;
+  data?: string[];
 };
 
 // ProcessError: contains original input, and all the CustomError encountered

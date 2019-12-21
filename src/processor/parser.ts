@@ -3,13 +3,13 @@
 import {
   Either, left, right, chain,
 } from 'fp-ts/lib/Either';
-import { flow } from 'fp-ts/lib/function';
-
-// domain
 import {
-  all, pipe, replace, trim, split,
+  all, pipe, replace, trim, split, reduce,
+  uniq, flatten, filter, head, take, join, drop, sort, map,
 } from 'ramda';
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
+
+// domain
 import { getError } from './errors';
 import { sanitize } from './sanitizer';
 import {
@@ -19,7 +19,61 @@ import {
 // helpers
 import { compact, isNonEmptyStringArray } from '../helpers/array';
 
+
 // ---- METHODS
+type FnGetAutorizedWords = (concepts: NonEmptyArray<Concept>) => string[];
+export const getAuthorizedWords: FnGetAutorizedWords = (concepts) => {
+  const words: string[] = pipe(
+    reduce((acc: string[], cur: Concept) => [
+      ...acc,
+      ...flatten(cur.is)], []),
+    uniq,
+    filter((item) => head(item) !== '*'),
+  )(concepts);
+  return words;
+};
+
+type FnSplitWords = (s: string) => string[];
+const splitWords: FnSplitWords = pipe(replace(/\s+/g, ' '), trim, split(' '), compact);
+
+type FnExtractMatchedWords = (authWords: string[], str: string, foundWords?: string[]) => string[] ;
+export const extractMatchedWords: FnExtractMatchedWords = (authWords, str, foundWords = []) => {
+  const splitted: string[] = splitWords(str);
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < splitted.length; i++) {
+    const wds = pipe(take(i + 1), join(' '))(splitted);
+    const found = authWords.find((w: string) => w === wds);
+    if (found) {
+      foundWords.push(found);
+      const newStr = pipe(drop(i + 1), join(' '))(splitted);
+      if (newStr) {
+        return extractMatchedWords(authWords, newStr, foundWords);
+      }
+      break;
+    }
+    // let retry, droping a word
+    if (i + 1 === splitted.length) {
+      splitted.shift();
+      i = -1;
+    }
+  }
+  return foundWords;
+};
+
+
+type FnCheckAllFound = (wds: string[], sentence: string) => any;
+export const checkAllFound: FnCheckAllFound = (wds, sentence) => pipe(
+  sort((a: string, b: string) => b.length - a.length),
+  reduce(
+    (acc: string, cur: string) => acc.replace(new RegExp(`\\b(${cur})\\b`), '#|#') as any,
+    sentence,
+  ),
+  split('#|#'),
+  map(trim),
+  compact,
+)(wds);
+
+
 type FnCheckArgs = (config: unknown, input: unknown) => Either<ProcessError, Inferred>;
 const checkArgs: FnCheckArgs = (config, input) => {
   // input should be a string
@@ -50,8 +104,6 @@ const checkArgs: FnCheckArgs = (config, input) => {
   if (!isValidConfig(config)) {
     return left({ input, config, errors: [getError(4)] } as ProcessError);
   }
-
-
   return right({
     input: input as string,
     config: config as NonEmptyArray<Concept>,
@@ -72,10 +124,7 @@ const clean: ProcessStep = chain(({ input, config, ...rest }: Inferred) => {
     : left({ input, config, errors: [getError(5)] });
 });
 
-type FnSplitWords = (s: string) => string[];
-const splitWords: FnSplitWords = pipe(replace(/\s+/g, ' '), trim, split(' '), compact);
-
-const getWords: ProcessStep = chain(({
+/* const getWords: ProcessStep = chain(({
   input, config, sanitized, ...inferred
 }: Inferred) => {
   const words = splitWords(sanitized);
@@ -85,8 +134,31 @@ const getWords: ProcessStep = chain(({
     } as Inferred)
     : left({ input, config, errors: [getError(6)] } as ProcessError);
 });
+ */
+export const getWords: ProcessStep = chain(({
+  input, config, sanitized, ...inferred
+}: Inferred) => {
+  const authWords = getAuthorizedWords(config);
+  const words = extractMatchedWords(authWords, sanitized);
+  return words.length
+    ? right({
+      ...inferred, input, config, sanitized, words: words as NonEmptyArray<string>,
+    } as Inferred)
+    : left({ input, config, errors: [getError(6)] } as ProcessError);
+});
 
-export const parse = flow(checkArgs, clean, getWords);
+export const checkWords: ProcessStep = chain(({
+  input, config, sanitized, words, ...inferred
+}: Inferred) => {
+  const unknownWords = checkAllFound(words, sanitized);
+  return unknownWords.length
+    ? left({ input, config, errors: [getError(7, unknownWords)] } as ProcessError)
+    : right({
+      ...inferred, input, config, sanitized, words,
+    });
+});
+
+export const parse = pipe(checkArgs, clean, getWords, checkWords);
 
 // for multi errors
 // @see https://dev.to/gcanti/getting-started-with-fp-ts-either-vs-validation-5eja

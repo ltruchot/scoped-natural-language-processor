@@ -7,6 +7,7 @@ export declare type Concept = {
 export declare type CustomError = {
     code: number;
     msg: string;
+    data?: string[];
 };
 export declare type ProcessError = {
     input: unknown;

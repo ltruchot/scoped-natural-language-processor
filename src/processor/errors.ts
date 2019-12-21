@@ -6,7 +6,7 @@ import { Option, getOrElse } from 'fp-ts/lib/Option';
 import { flow } from 'fp-ts/lib/function';
 
 // custom
-import { prop } from '../helpers/object';
+import { prop, inject } from '../helpers/object';
 import { CustomError } from './models';
 
 // ---- DATA
@@ -40,6 +40,9 @@ const errors: Array<CustomError> = [
     msg: "input can't be correctly splitted in words",
   }, {
     code: 7,
+    msg: 'unknown word(s)',
+  }, {
+    code: 8,
     msg: 'No matching concept',
   },
 ];
@@ -59,7 +62,7 @@ const propCode: FnPropCode = flow(
 type FnFindError = (n: number) => Option<CustomError>;
 const findError: FnFindError = (n) => findFirst((item: any) => eqNumber.equals(propCode(item), n))(errors);
 
-type FnGetError = (code:number) => CustomError;
-export const getError: FnGetError = (code) => flow(
-  findError, getOrElse(() => unknownError),
+type FnGetError = (code:number, data?: string[]) => CustomError;
+export const getError: FnGetError = (code, data) => flow(
+  findError, inject(data), getOrElse(() => unknownError),
 )(code);

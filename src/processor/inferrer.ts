@@ -9,7 +9,6 @@ import {
 } from './models';
 import { isFlat, firstReal } from '../helpers/array';
 import { getError } from './errors';
-import { log } from '../helpers/debug';
 
 
 export const infer: ProcessStep = chain(({
@@ -104,11 +103,10 @@ export const infer: ProcessStep = chain(({
     ignore: 0,
   }), prop('continue'))(parts));
 
-  const isFound: any = pipe(map<any, any>(prop('key')), log, map(findConcept), map<any, any>(prop('is')), log, any(findPath(words, understood)))(config);
-  console.log(isFound, solution, understood);
+  const isFound: any = pipe(map<any, any>(prop('key')), map(findConcept), map<any, any>(prop('is')), any(findPath(words, understood)))(config);
   return isFound
     ? right({
       ...inferred, words, config, solution, understood,
     } as Inferred)
-    : left({ ...inferred, config, errors: [getError(7)] } as ProcessError);
+    : left({ ...inferred, config, errors: [getError(8)] } as ProcessError);
 });

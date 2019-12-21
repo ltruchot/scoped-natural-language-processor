@@ -1,43 +1,15 @@
+// npm
 import { prop } from 'ramda';
+
+// curstom
 import { process } from '.';
 import { Inferred } from './processor/models';
+import { concepts } from './fixtures/concepts';
+import { getError } from './processor/errors';
 
-const config = [
-  {
-    key: 'sentence',
-    is: [
-      ['*subject', '*intransitiveVerb'],
-      ['*article', '*subject', '*intransitiveVerb'],
-      ['*subject', '*linkingVerb', '*adjective'],
-      ['*article', '*subject', '*linkingVerb', '*adjective'],
-    ],
-  },
-  {
-    key: 'article',
-    is: ['this', 'the', 'a'],
-  },
-  {
-    key: 'subject',
-    is: ['cat', 'sky', 'grandma'],
-  },
-  {
-    key: 'linkingVerb',
-    is: ['is', 'seems', 'becomes'],
-  },
-  {
-    key: 'intransitiveVerb',
-    is: ['sings', 'calms down'],
-  },
-  {
-    key: 'adjective',
-    is: ['gray', 'threatening'],
-  },
-];
-
-// TODO: multiword case like "calms down"
 describe('Processor::process', () => {
   test('Process 0 on one level', () => {
-    const [error, result] = process(config, 'grandma sings');
+    const [error, result] = process(concepts, 'grandma sings');
     expect(error).toBeNull();
     expect(prop('understood', result as Inferred)).toEqual({
       subject: 'grandma',
@@ -45,7 +17,16 @@ describe('Processor::process', () => {
     });
   });
   test('Process 1 on one level', () => {
-    const [error, result] = process(config, 'grandma is threatening');
+    const [error, result] = process(concepts, 'the sky calms down');
+    expect(error).toBeNull();
+    expect(prop('understood', result as Inferred)).toEqual({
+      article: 'the',
+      subject: 'sky',
+      intransitiveVerb: 'calms down',
+    });
+  });
+  test('Process 2 on one level', () => {
+    const [error, result] = process(concepts, 'grandma is threatening');
     expect(error).toBeNull();
     expect(prop('understood', result as Inferred)).toEqual({
       subject: 'grandma',
@@ -53,15 +34,23 @@ describe('Processor::process', () => {
       adjective: 'threatening',
     });
   });
-  test('Process 2 on one level', () => {
-    const [error, result] = process(config, 'this cat seems gray');
+  test('Process 3 on one level', () => {
+    const [error, result] = process(concepts, 'this cat seems gray');
     expect(error).toBeNull();
-
     expect(prop('understood', result as Inferred)).toEqual({
       article: 'this',
       subject: 'cat',
       linkingVerb: 'seems',
       adjective: 'gray',
+    });
+  });
+  test('Process 4 on one level', () => {
+    const input = 'my sky might have been gray';
+    const [error] = process(concepts, input);
+    expect(error).toEqual({
+      input,
+      config: concepts,
+      errors: [getError(7, ['my', 'might have been'])],
     });
   });
 });
