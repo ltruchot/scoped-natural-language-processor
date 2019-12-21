@@ -1,11 +1,12 @@
 import { left } from 'fp-ts/lib/Either';
+import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
 import { getError } from './errors';
 
 import {
   parse, checkAllFound, getAuthorizedWords, extractMatchedWords,
 } from './parser';
-import { ProcessError } from './models';
-import { concepts } from '../fixtures/concepts';
+import { ProcessError, Concept } from './models';
+import { sentences } from '../fixtures/sentences';
 
 describe('Parser: Parse method', () => {
   test('Non-string param should return a code 1 error', () => {
@@ -31,7 +32,7 @@ describe('Parser: Parse method', () => {
   });
 
   test('Input with unknow words should be discovered', () => {
-    const authWords = getAuthorizedWords(concepts);
+    const authWords = getAuthorizedWords(sentences as NonEmptyArray<Concept>);
     expect(extractMatchedWords(authWords, 'the cat is blue'));
     const input = 'the cat is blue';
     expect(checkAllFound(authWords, input))
@@ -39,7 +40,7 @@ describe('Parser: Parse method', () => {
   });
 
   test('Input with unknow words should be discovered', () => {
-    const authWords = getAuthorizedWords(concepts);
+    const authWords = getAuthorizedWords(sentences);
     expect(extractMatchedWords(authWords, 'the cat is blue'))
       .toEqual(['the', 'cat', 'is']);
     expect(extractMatchedWords(authWords, 'grandma calms down'))

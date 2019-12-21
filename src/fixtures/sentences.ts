@@ -1,4 +1,7 @@
-export const concepts = [
+import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
+import { Concept } from '../processor/models';
+
+export const sentences: NonEmptyArray<Concept> = [
   {
     key: 'sentence',
     is: [
@@ -29,5 +32,3 @@ export const concepts = [
     is: ['gray', 'threatening'],
   },
 ];
-
-
