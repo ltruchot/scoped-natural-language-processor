@@ -6,7 +6,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "start": "make watch",
-    "test": "make test"
+    "test": "make test",
+    "prepublish": "make build"
   },
   "repository": {
     "type": "git",

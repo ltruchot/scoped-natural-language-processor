@@ -4,11 +4,56 @@ An input/output natural language interpreter written in TypeScript. It takes a c
 
 ## Installation
 
+```
+npm i scoped-natural-language-processor --save 
+```
+
 ## Use
-Basic use example:
+
+Basic use example with **TypeScript**:
+```typescript
+import{ process, Concept, Inferred, ProcessError } from "scoped-natural-language-processor";
+export const sentences: Concept[] = [
+  {
+    key: 'sentence',
+    is: [
+      ['*subject', '*linkingVerb', '*adjective'],
+      ['*article', '*subject', '*linkingVerb', '*adjective'],
+    ],
+  },
+  {
+    key: 'article',
+    is: ['this', 'the', 'a'],
+  },
+  {
+    key: 'subject',
+    is: ['cat', 'sky', 'grandma'],
+  },
+  {
+    key: 'linkingVerb',
+    is: ['is', 'seems', 'becomes'],
+  },
+  {
+    key: 'adjective',
+    is: ['gray', 'threatening'],
+  },
+];
+const [error: ProcessError, result: Inferred] = process(config, 'this cat seems threatening');
+console.log(result); 
+/*
+{
+  article: 'the',
+  subject: 'cat',
+  linkingVerb: 'is',
+  adjective: 'threatening',
+}
+*/
+```
+
+Basic use example with **JavaScript**:
 ```typescript
 import{ process } from "scoped-natural-language-processor";
-export const sentences: NonEmptyArray<Concept> = [
+export const sentences = [
   {
     key: 'sentence',
     is: [
