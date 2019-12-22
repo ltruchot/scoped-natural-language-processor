@@ -1,6 +1,6 @@
 {
   "name": "scoped-natural-language-processor",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "An input/output natural language interpreter written in TypeScript. It takes a configuration and a sentence, then it return a tree of concepts and values.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

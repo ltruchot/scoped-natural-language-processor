@@ -12,8 +12,11 @@ npm i scoped-natural-language-processor --save
 
 Basic use example with **TypeScript**:
 ```typescript
-import{ process, Concept, Inferred, ProcessError } from "scoped-natural-language-processor";
-export const sentences: Concept[] = [
+import {
+  process, Concept, Inferred, ProcessError,
+} from 'scoped-natural-language-processor';
+
+const sentences: Concept[] = [
   {
     key: 'sentence',
     is: [
@@ -38,22 +41,25 @@ export const sentences: Concept[] = [
     is: ['gray', 'threatening'],
   },
 ];
-const [error: ProcessError, result: Inferred] = process(config, 'this cat seems threatening');
-console.log(result); 
+const [error, result]: [ProcessError, Inferred] = process(sentences, 'this cat seems threatening');
+if (!error) {
+  console.log(result);
+}
 /*
 {
-  article: 'the',
+  article: 'this',
   subject: 'cat',
-  linkingVerb: 'is',
+  linkingVerb: 'seems',
   adjective: 'threatening',
 }
 */
 ```
 
 Basic use example with **JavaScript**:
-```typescript
-import{ process } from "scoped-natural-language-processor";
-export const sentences = [
+```javascript
+const { process } = require('scoped-natural-language-processor');
+
+const sentences = [
   {
     key: 'sentence',
     is: [
@@ -78,13 +84,16 @@ export const sentences = [
     is: ['gray', 'threatening'],
   },
 ];
-const [error, result] = process(config, 'this cat seems threatening');
-console.log(result); 
+const [error, result] = process(sentences, 'this cat seems threatening');
+if (!error) {
+  console.log(result);
+}
+
 /*
 {
-  article: 'the',
+  article: 'this',
   subject: 'cat',
-  linkingVerb: 'is',
+  linkingVerb: 'seems',
   adjective: 'threatening',
 }
 */
