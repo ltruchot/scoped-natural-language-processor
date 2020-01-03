@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "scoped-natural-language-processor": "0.0.3"
+    "scoped-natural-language-processor": "0.0.4"
   },
   "devDependencies": {
     "typescript": "3.7.4"

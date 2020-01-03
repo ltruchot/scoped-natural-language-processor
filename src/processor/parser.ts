@@ -110,7 +110,7 @@ const checkArgs: FnCheckArgs = (config, input) => {
     sanitized: '',
     words: [],
     solution: [],
-    understood: {},
+    understood: [],
   } as Inferred);
 };
 

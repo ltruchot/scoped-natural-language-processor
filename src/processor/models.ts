@@ -43,9 +43,14 @@ export type Inferred = {
   sanitized: string;
   words: string[];
   solution: string[];
-  understood: any;
+  understood: InferredConcept[];
 };
 
 export type ProcessStep = (e: Either<ProcessError, Inferred>) => Either<ProcessError, Inferred>;
 
 export type Output = [ProcessError, null] | [null, Inferred];
+
+export type InferredConcept = {
+  concept: string;
+  value: string | InferredConcept[]
+};

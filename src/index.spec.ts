@@ -12,38 +12,38 @@ describe('Processor::process', () => {
   test('Process 0 on one level', () => {
     const [error, result] = process(sentences, 'grandma sings');
     expect(error).toBeNull();
-    expect(prop('understood', result as Inferred)).toEqual({
-      subject: 'grandma',
-      intransitiveVerb: 'sings',
-    });
+    expect(prop('understood', result as Inferred)).toEqual([
+      { concept: 'subject', value: 'grandma' },
+      { concept: 'intransitiveVerb', value: 'sings' },
+    ]);
   });
   test('Process 1 on one level', () => {
     const [error, result] = process(sentences, 'the sky calms down');
     expect(error).toBeNull();
-    expect(prop('understood', result as Inferred)).toEqual({
-      article: 'the',
-      subject: 'sky',
-      intransitiveVerb: 'calms down',
-    });
+    expect(prop('understood', result as Inferred)).toEqual([
+      { concept: 'article', value: 'the' },
+      { concept: 'subject', value: 'sky' },
+      { concept: 'intransitiveVerb', value: 'calms down' },
+    ]);
   });
   test('Process 2 on one level', () => {
     const [error, result] = process(sentences, 'grandma is threatening');
     expect(error).toBeNull();
-    expect(prop('understood', result as Inferred)).toEqual({
-      subject: 'grandma',
-      linkingVerb: 'is',
-      adjective: 'threatening',
-    });
+    expect(prop('understood', result as Inferred)).toEqual([
+      { concept: 'subject', value: 'grandma' },
+      { concept: 'linkingVerb', value: 'is' },
+      { concept: 'adjective', value: 'threatening' },
+    ]);
   });
   test('Process 3 on one level', () => {
     const [error, result] = process(sentences, 'this cat seems gray');
     expect(error).toBeNull();
-    expect(prop('understood', result as Inferred)).toEqual({
-      article: 'this',
-      subject: 'cat',
-      linkingVerb: 'seems',
-      adjective: 'gray',
-    });
+    expect(prop('understood', result as Inferred)).toEqual([
+      { concept: 'article', value: 'this' },
+      { concept: 'subject', value: 'cat' },
+      { concept: 'linkingVerb', value: 'seems' },
+      { concept: 'adjective', value: 'gray' },
+    ]);
   });
   test('Process 4 on one level', () => {
     const input = 'my sky might have been gray';
@@ -58,16 +58,19 @@ describe('Processor::process', () => {
     const input = 'create a blue box two meters left';
     const [error, result] = process(shrdluCommands, input);
     expect(error).toBeNull();
-    expect(prop('understood', result as Inferred)).toEqual({
-      verb: 'create',
-      number: 'a',
-      color: 'blue',
-      shape: 'box',
-      place: {
-        number: 'two',
-        unit: 'meters',
-        direction: 'left',
+    expect(prop('understood', result as Inferred)).toEqual([
+      { concept: 'verb', value: 'create' },
+      { concept: 'number', value: 'a' },
+      { concept: 'color', value: 'blue' },
+      { concept: 'shape', value: 'box' },
+      {
+        concept: 'place',
+        value: [
+          { concept: 'number', value: 'two' },
+          { concept: 'unit', value: 'meters' },
+          { concept: 'direction', value: 'left' },
+        ],
       },
-    });
+    ]);
   });
 });
