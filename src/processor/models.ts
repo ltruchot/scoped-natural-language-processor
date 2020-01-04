@@ -19,7 +19,8 @@ import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
 
 export type Concept = {
   key: string;
-  is: string[] | Array<string[]>;
+  is: string[];
+  contains: Array<string[]>
 };
 
 // CustomError: contains failing reason of the process

@@ -7,14 +7,15 @@ import {
 import {
   Inferred, ProcessStep, ProcessError, InferredConcept,
 } from './models';
-import { isFlat, firstReal } from '../helpers/array';
+import { firstReal } from '../helpers/array';
 import { getError } from './errors';
+import { Concept } from '..';
 
 
 export const infer: ProcessStep = chain(({
   config, words, ...inferred
 }) => {
-  const findConcept = (val: string) => find(pipe(prop<string, string>('key'), equals(val)), config as any);
+  const findConcept = (val: string): Concept | undefined => find(pipe(prop<any, any>('key'), equals(val)), config);
   const understood: InferredConcept[] = [];
   let solution: string[] = [];
 
@@ -69,8 +70,8 @@ export const infer: ProcessStep = chain(({
     }
 
     // if new concept is an simple array of choice, check if part is in here
-    if (isFlat((newConcept as any).is)) {
-      const isValidConcept = includes(part, (newConcept as any).is);
+    if (newConcept.is.length) {
+      const isValidConcept = includes(part, newConcept.is);
       const wasAlreadyFound = understanding.find((c) => c.concept === newConcept.key);
       if (isValidConcept && !wasAlreadyFound) {
         understanding.push({ concept: newConcept.key, value: part as string });
@@ -79,7 +80,7 @@ export const infer: ProcessStep = chain(({
       return {
         ...acc,
         idx: acc.idx + 1,
-        continue: includes(part, (newConcept as any).is),
+        continue: includes(part, newConcept.is),
       };
     }
 
@@ -91,7 +92,7 @@ export const infer: ProcessStep = chain(({
     const sub: any = pipe(map((nc: any) => {
       const newParts = take(nc.length, drop(acc.idx, parts));
       return findPath(newParts, subConcept)([nc]);
-    }), firstReal)((newConcept as any).is);
+    }), firstReal)((newConcept as any).contains);
 
     return {
       ...acc,
@@ -109,7 +110,7 @@ export const infer: ProcessStep = chain(({
   const isFound: any = pipe(
     map<any, any>(prop('key')),
     map(findConcept),
-    map<any, any>(prop('is')),
+    map<any, any>(a => a.is.length ? a.is : a.contains),
     any(findPath(words, understood)),
   )(config);
   return isFound

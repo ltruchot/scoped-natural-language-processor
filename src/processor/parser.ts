@@ -98,8 +98,8 @@ const checkArgs: FnCheckArgs = (config, input) => {
 
   // config should be well formatted
   const isValidConfig = all((item: any) => item.key
-    && Array.isArray(item.is)
-    && (isNonEmptyStringArray(item.is) || all(isNonEmptyStringArray, item.is)));
+    && Array.isArray(item.is) && Array.isArray(item.contains)
+    && (isNonEmptyStringArray(item.is) || isNonEmptyStringArray, item.contains));
 
   if (!isValidConfig(config)) {
     return left({ input, config, errors: [getError(4)] } as ProcessError);
