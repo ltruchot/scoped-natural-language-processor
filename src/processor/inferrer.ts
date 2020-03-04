@@ -6,10 +6,10 @@ import {
 } from 'ramda';
 import {
   Inferred, ProcessStep, ProcessError, InferredConcept,
+  Concept,
 } from './models';
 import { firstReal } from '../helpers/array';
 import { getError } from './errors';
-import { Concept } from '..';
 
 
 export const infer: ProcessStep = chain(({
@@ -110,7 +110,7 @@ export const infer: ProcessStep = chain(({
   const isFound: any = pipe(
     map<any, any>(prop('key')),
     map(findConcept),
-    map<any, any>(a => a.is.length ? a.is : a.contains),
+    map<any, any>((a) => (a.is.length ? a.is : a.contains)),
     any(findPath(words, understood)),
   )(config);
   return isFound

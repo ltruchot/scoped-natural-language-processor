@@ -3,7 +3,10 @@ const { process } = require('scoped-natural-language-processor');
 const sentences = [
   {
     key: 'sentence',
-    is: [
+    is: [],
+    contains: [
+      ['*subject', '*intransitiveVerb'],
+      ['*article', '*subject', '*intransitiveVerb'],
       ['*subject', '*linkingVerb', '*adjective'],
       ['*article', '*subject', '*linkingVerb', '*adjective'],
     ],
@@ -11,29 +14,42 @@ const sentences = [
   {
     key: 'article',
     is: ['this', 'the', 'a'],
+    contains: [],
   },
   {
     key: 'subject',
     is: ['cat', 'sky', 'grandma'],
+    contains: [],
   },
   {
     key: 'linkingVerb',
     is: ['is', 'seems', 'becomes'],
+    contains: [],
+  },
+  {
+    key: 'intransitiveVerb',
+    is: ['sings', 'calms down'],
+    contains: [],
   },
   {
     key: 'adjective',
     is: ['gray', 'threatening'],
+    contains: [],
   },
 ];
-const [error1, result1] = process(sentences, 'this cat seems threatening');
-if (!error1) {
-  console.log(result1);
+
+const [error, result] = process(sentences, 'this cat seems threatening');
+if (!error) {
+  console.log(result);
+} else {
+  console.error(error);
 }
 
 const commands = [
   {
     key: 'command',
-    is: [
+    is: [],
+    contains: [
       ['*verb', '*number', '*shape'],
       ['*verb', '*number', '*color', '*shape'],
       ['*verb', '*number', '*shape', '*place'],
@@ -45,14 +61,17 @@ const commands = [
     is: [
       'create',
     ],
+    contains: [],
   },
   {
     key: 'shape',
     is: ['box', 'boxes', 'cone', 'cones', 'pyramid', 'pyramids', 'cylinder', 'cylinders', 'sphere', 'spheres'],
+    contains: [],
   },
   {
     key: 'place',
-    is: [
+    is: [],
+    contains: [
       ['*direction'],
       ['to', '*direction'],
       ['to', 'the', '*direction'],
@@ -66,23 +85,29 @@ const commands = [
   {
     key: 'unit',
     is: ['meter', 'meters'],
+    contains: [],
   },
   {
     key: 'number',
     is: ['a', 'an', 'one', 'two', 'three'],
+    contains: [],
   },
   {
     key: 'color',
     is: ['red', 'green', 'blue'],
+    contains: [],
   },
   {
     key: 'direction',
     is: ['top', 'bottom', 'left', 'right', 'front', 'back'],
+    contains: [],
   },
 ];
 
 
-const [error2, result2] = process(commands, 'create a blue box two meters left');
-if (!error2) {
-  console.log(result2);
+const [err, res] = process(commands, 'create a blue box two meters left');
+if (!err) {
+  console.log(res);
+} else {
+  console.error(err);
 }

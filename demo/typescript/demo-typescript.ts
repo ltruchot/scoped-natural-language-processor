@@ -1,7 +1,8 @@
-import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
-import { Concept } from '../processor/models';
+import {
+  process, Concept, Inferred, ProcessError,
+} from 'scoped-natural-language-processor';
 
-export const shrdluCommands: NonEmptyArray<Concept> = [
+export const commands: Array<Concept> = [
   {
     key: 'command',
     is: [],
@@ -60,3 +61,10 @@ export const shrdluCommands: NonEmptyArray<Concept> = [
     contains: [],
   },
 ];
+
+const [err, res]: [ProcessError, Inferred] = process(commands, 'create a blue box two meters left');
+if (!err) {
+  console.log(res);
+} else {
+  console.error(err);
+}

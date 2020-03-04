@@ -3,6 +3,7 @@
 import {
   Either, left, right, chain,
 } from 'fp-ts/lib/Either';
+import { identity } from 'fp-ts/lib/function';
 import {
   all, pipe, replace, trim, split, reduce,
   uniq, flatten, filter, head, take, join, drop, sort, map,
@@ -11,7 +12,7 @@ import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
 
 // domain
 import { getError } from './errors';
-import { sanitize } from './sanitizer';
+
 import {
   Inferred, ProcessError, ProcessStep, Concept,
 } from './models';
@@ -116,7 +117,7 @@ const checkArgs: FnCheckArgs = (config, input) => {
 
 
 const clean: ProcessStep = chain(({ input, config, ...rest }: Inferred) => {
-  const sanitized = sanitize(input);
+  const sanitized = identity(input);
   return sanitized
     ? right({
       input, config, ...rest, sanitized,
